@@ -8,7 +8,11 @@ class Tile
   end
 
   def flagify
-    @flag = true
+    if @flag
+      @flag = false
+    else
+      @flag =true
+    end
   end
 
   def reveal
