@@ -3,6 +3,8 @@ require "colorize"
 
 class Board
   attr_accessor :grid
+  DIRECTIONS = [[-1, 0], [-1, 1], [-1, -1], [0, 1], [0, -1], [1, -1], [1, 0], [1, 1]]
+
   def initialize(tiles)
     @grid = tiles
   end
@@ -50,6 +52,18 @@ class Board
     self.new(tiles)
 
 
+  end
+
+  def neighbors(pos)
+    bomb_counter = 0
+    x , y = pos
+    p x,y
+    DIRECTIONS.each do |direction|
+      i,j = direction
+      next if i+x >=9 || x+i <0 || y +j >=9 || y+j <0
+      bomb_counter += 1 if @grid[x+i][y+j].bomb
+    end
+    return bomb_counter
   end
 
   def render

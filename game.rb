@@ -11,10 +11,8 @@ class MineSweeper
     puts "Let's get started. "
     until game_over?
       pos = get_coordinate
-      puts "Do you want to flag or reveal? (F/R)"
-      option = gets.chomp.downcase
-      @grid[pos].flagify if option =~ /[f]/
-      @grid[pos].reveal if option =~ /[r]/
+      get_options(pos)
+      p @grid.neighbors(pos)
       @grid.render
     end
   end
@@ -44,6 +42,19 @@ class MineSweeper
     return pos[0] < 9 && pos[1] < 9 && pos[0] >=0 && pos[1] >=0
   end
 
+  def get_options(pos)
+    puts "Do you want to flag or reveal? (F/R)"
+    option = ''
+    until option =~ /[f]/ || option =~ /[r]/
+
+      option = gets.chomp.downcase
+      unless option.split('').include?("f") || option.split('').include?("r")
+        puts "Please select flag or reveal !! (F/R)"
+      end
+      @grid[pos].flagify if option =~ /[f]/
+      @grid[pos].reveal if option =~ /[r]/
+    end
+  end
   def won?
 
   end
