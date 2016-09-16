@@ -12,7 +12,8 @@ class MineSweeper
     until game_over?
       pos = get_coordinate
       get_options(pos)
-      p @grid.neighbors(pos)
+      neighbors = @grid.neighbors(pos)
+
       @grid.render
     end
   end
@@ -52,7 +53,14 @@ class MineSweeper
         puts "Please select flag or reveal !! (F/R)"
       end
       @grid[pos].flagify if option =~ /[f]/
-      @grid[pos].reveal if option =~ /[r]/
+      if option =~ /[r]/
+        if @grid[pos].bomb == true
+          @grid.reveal
+        else
+          @grid.reveal_neighbors(pos)
+        end
+
+      end
     end
   end
   def won?

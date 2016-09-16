@@ -55,19 +55,36 @@ class Board
   end
 
   def neighbors(pos)
-    bomb_counter = 0
+    neighbors = []
     x , y = pos
-    p x,y
     DIRECTIONS.each do |direction|
       i,j = direction
       next if i+x >=9 || x+i <0 || y +j >=9 || y+j <0
-      bomb_counter += 1 if @grid[x+i][y+j].bomb
+      neighbors << [x+i,y+j] unless @grid[x+i][y+j].revealed
+    end
+    neighbors
+  end
+
+  def bomb_counter(array_of_neighbors)
+    bomb_counter = 0
+    array_of_neighbors.each do |neighbor|
+      bomb_counter +=1 if @grid[neighbor[0]][neighbor[1]].bomb
     end
     return bomb_counter
   end
 
+  def reveal_neighbors(pos)
+      @grid[pos[0]][pos[1]].reveal
+      neighbors = neighbors(pos)
+      return if bomb_counter(neighbors) > 0
+      p 'yes'
+      neighbors.each do |pos|
+        p "yes"
+        reveal_neighbors(pos)
+      end
+  end
+
   def render
-    p String.colors
     puts "   "+(0..8).to_a.map{|num| num.to_s.colorize(:color => :red)}.join("   ")
     @grid.each_with_index do |row, idx|
 
